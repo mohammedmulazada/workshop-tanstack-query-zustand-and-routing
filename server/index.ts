@@ -1,5 +1,5 @@
-import express from 'express';
-import bodyParser from 'body-parser';
+import express from "express";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -9,19 +9,19 @@ type Todo = {
   id: number;
   text: string;
   completed: boolean;
-}
+};
 
-const todos:  Todo[] = [
+const todos: Todo[] = [
   {
     id: 1,
-    text: 'Learn about RESTful API design',
-    completed: false
+    text: "Creating this file",
+    completed: false,
   },
   {
     id: 2,
-    text: 'Take a break',
-    completed: true
-  }
+    text: "Creating this todo",
+    completed: false,
+  },
 ];
 
 const generateId = () => {
@@ -38,16 +38,16 @@ const generateId = () => {
 };
 
 // GET
-app.get('/todos', (req, res) => {
+app.get("/todos", (_req, res) => {
   res.json(todos);
 });
 
 // POST
-app.post('/todos', (req, res) => {
+app.post("/todos", (req: express.Request, res: express.Response) => {
   const todo = {
     id: generateId(),
     text: req.body.text,
-    completed: false
+    completed: false,
   };
 
   todos.push(todo);
@@ -56,8 +56,8 @@ app.post('/todos', (req, res) => {
 });
 
 // PATCH /todos/:id
-app.patch('/todos/:id', (req, res) => {
-  const todo = todos.find(todo => todo.id === Number(req.params.id));
+app.patch("/todos/:id", (req: express.Request, res: express.Response) => {
+  const todo = todos.find((todo) => todo.id === Number(req.params.id));
 
   if (todo) {
     todo.completed = !todo.completed;
@@ -69,8 +69,8 @@ app.patch('/todos/:id', (req, res) => {
 });
 
 // GET /todos/:id
-app.get('/todos/:id', (req, res) => {
-  const todo = todos.find(todo => todo.id === Number(req.params.id));
+app.get("/todos/:id", (req: express.Request, res: express.Response) => {
+  const todo = todos.find((todo) => todo.id === Number(req.params.id));
 
   if (todo) {
     res.json(todo);
@@ -81,5 +81,5 @@ app.get('/todos/:id', (req, res) => {
 
 // Start the server
 app.listen(3000, () => {
-  console.log('Server listening on port 3000');
+  console.log("Server listening on port 3000");
 });
