@@ -9,6 +9,7 @@ function App() {
   return (
     <div className="App">
       <header>
+        <span>Amount of todos added: 0</span>
         <nav>
           <ul>
             {todoId && (

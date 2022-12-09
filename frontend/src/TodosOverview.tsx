@@ -38,26 +38,31 @@ export const TodosOverview = () => {
 
   return (
     <div>
-      <div>
-        <h1>Completed todos</h1>
-        {todos.completedTodos.map((todo) => {
-          return (
-            <li key={todo.id}>
-              <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
-            </li>
-          );
-        })}
-      </div>
-      <div>
-        <h1>Uncompleted todos</h1>
-        {todos.uncompletedTodos.map((todo) => {
-          return (
-            <li key={todo.id}>
-              <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
-            </li>
-          );
-        })}
-      </div>
+      {Boolean(todos?.completedTodos?.length) && (
+        <div>
+          <h1>Completed todos</h1>
+          {todos.completedTodos.map((todo) => {
+            return (
+              <li key={todo.id}>
+                <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
+              </li>
+            );
+          })}
+        </div>
+      )}
+
+      {Boolean(todos?.uncompletedTodos?.length) && (
+        <div>
+          <h1>Uncompleted todos</h1>
+          {todos.uncompletedTodos.map((todo) => {
+            return (
+              <li key={todo.id}>
+                <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
+              </li>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 };
