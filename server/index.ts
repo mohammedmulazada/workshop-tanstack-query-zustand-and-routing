@@ -15,12 +15,12 @@ const getRandomNumber = (min: number, max: number): number => {
 const todos: Todo[] = [
   {
     id: 1,
-    text: "Creating this file",
+    text: "Give a workshop",
     completed: false,
   },
   {
     id: 2,
-    text: "Creating this todo",
+    text: "Do groceries",
     completed: false,
   },
 ];

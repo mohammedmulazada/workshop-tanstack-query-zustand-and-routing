@@ -2,9 +2,19 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Todo } from "../../types/Todo";
 
+const filterCompletedTodos = (todo: Todo) => {
+  return todo.completed;
+};
+
+const filterUncompletedTodos = (todo: Todo) => {
+  return !todo.completed;
+};
+
 export const TodosOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<Todo[]>([]);
+  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
+  const [uncompletedTodos, setUncompletedTodos] = useState<Todo[]>([]);
 
   useEffect(() => {
     const fetchTodos = async () => {
@@ -12,6 +22,8 @@ export const TodosOverview = () => {
 
       const res: Todo[] = await data.json();
       setTodos(res);
+      setCompletedTodos(res.filter(filterCompletedTodos));
+      setUncompletedTodos(res.filter(filterUncompletedTodos));
       setIsLoading(false);
     };
 
@@ -24,13 +36,26 @@ export const TodosOverview = () => {
 
   return (
     <div>
-      {todos.map((todo) => {
-        return (
-          <li key={todo.id}>
-            <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
-          </li>
-        );
-      })}
+      <div>
+        <h1>Completed todos</h1>
+        {completedTodos.map((todo) => {
+          return (
+            <li key={todo.id}>
+              <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
+            </li>
+          );
+        })}
+      </div>
+      <div>
+        <h1>Uncompleted todos</h1>
+        {uncompletedTodos.map((todo) => {
+          return (
+            <li key={todo.id}>
+              <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
+            </li>
+          );
+        })}
+      </div>
     </div>
   );
 };
