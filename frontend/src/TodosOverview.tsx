@@ -12,16 +12,20 @@ const filterUncompletedTodos = (todo: Todo) => {
 
 export const TodosOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
-  const [uncompletedTodos, setUncompletedTodos] = useState<Todo[]>([]);
+  const [todos, setTodos] = useState<{
+    completedTodos: Todo[];
+    uncompletedTodos: Todo[];
+  }>({ completedTodos: [], uncompletedTodos: [] });
 
   useEffect(() => {
     const fetchTodos = async () => {
       const data = await fetch("http://localhost:3000/todos");
 
       const res: Todo[] = await data.json();
-      setCompletedTodos(res.filter(filterCompletedTodos));
-      setUncompletedTodos(res.filter(filterUncompletedTodos));
+      setTodos({
+        completedTodos: res.filter(filterCompletedTodos),
+        uncompletedTodos: res.filter(filterUncompletedTodos),
+      });
       setIsLoading(false);
     };
 
@@ -36,7 +40,7 @@ export const TodosOverview = () => {
     <div>
       <div>
         <h1>Completed todos</h1>
-        {completedTodos.map((todo) => {
+        {todos.completedTodos.map((todo) => {
           return (
             <li key={todo.id}>
               <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
@@ -46,7 +50,7 @@ export const TodosOverview = () => {
       </div>
       <div>
         <h1>Uncompleted todos</h1>
-        {uncompletedTodos.map((todo) => {
+        {todos.uncompletedTodos.map((todo) => {
           return (
             <li key={todo.id}>
               <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
