@@ -1,14 +1,15 @@
 import express from "express";
-import bodyParser from "body-parser";
+import cors from "cors";
+import { Todo } from "../types/Todo";
 
 const app = express();
 
-app.use(bodyParser.json());
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-type Todo = {
-  id: number;
-  text: string;
-  completed: boolean;
+const getRandomNumber = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 const todos: Todo[] = [
@@ -39,7 +40,9 @@ const generateId = () => {
 
 // GET
 app.get("/todos", (_req, res) => {
-  res.json(todos);
+  setTimeout(() => {
+    res.json(todos);
+  }, getRandomNumber(700, 1500));
 });
 
 // POST
@@ -62,7 +65,9 @@ app.patch("/todos/:id", (req: express.Request, res: express.Response) => {
   if (todo) {
     todo.completed = !todo.completed;
 
-    res.json(todos);
+    setTimeout(() => {
+      res.json(todo);
+    }, getRandomNumber(700, 1000));
   } else {
     res.sendStatus(404);
   }
@@ -73,7 +78,9 @@ app.get("/todos/:id", (req: express.Request, res: express.Response) => {
   const todo = todos.find((todo) => todo.id === Number(req.params.id));
 
   if (todo) {
-    res.json(todo);
+    setTimeout(() => {
+      res.json(todo);
+    }, getRandomNumber(1500, 2500));
   } else {
     res.sendStatus(404);
   }
