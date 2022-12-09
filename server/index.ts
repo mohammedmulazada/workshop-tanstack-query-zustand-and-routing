@@ -14,12 +14,12 @@ const getRandomNumber = (min: number, max: number): number => {
 
 const todos: Todo[] = [
   {
-    id: 1,
+    id: "1",
     text: "Give a workshop",
     completed: false,
   },
   {
-    id: 2,
+    id: "2",
     text: "Do groceries",
     completed: false,
   },
@@ -31,11 +31,11 @@ const generateId = () => {
 
   // If there are no todos in the list, start the ID at 1
   if (!lastTodo) {
-    return 1;
+    return String(1);
   }
 
   // Otherwise, generate a new ID by incrementing the last todo's ID by 1
-  return lastTodo.id + 1;
+  return String(lastTodo.id + 1);
 };
 
 // GET
@@ -60,7 +60,7 @@ app.post("/todos", (req: express.Request, res: express.Response) => {
 
 // PATCH /todos/:id
 app.patch("/todos/:id", (req: express.Request, res: express.Response) => {
-  const todo = todos.find((todo) => todo.id === Number(req.params.id));
+  const todo = todos.find((todo) => todo.id === req.params.id);
 
   if (todo) {
     todo.completed = !todo.completed;
@@ -75,7 +75,7 @@ app.patch("/todos/:id", (req: express.Request, res: express.Response) => {
 
 // GET /todos/:id
 app.get("/todos/:id", (req: express.Request, res: express.Response) => {
-  const todo = todos.find((todo) => todo.id === Number(req.params.id));
+  const todo = todos.find((todo) => todo.id === req.params.id);
 
   if (todo) {
     setTimeout(() => {
