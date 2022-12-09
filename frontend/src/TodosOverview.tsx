@@ -10,6 +10,52 @@ const filterUncompletedTodos = (todo: Todo) => {
   return !todo.completed;
 };
 
+type TodosProps = {
+  todos: Todo[];
+};
+
+const CompletedTodos = (props: TodosProps) => {
+  const { todos } = props;
+
+  if (!todos || !todos.length) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h1>Completed todos</h1>
+      {todos.map((todo) => {
+        return (
+          <li key={todo.id}>
+            <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
+          </li>
+        );
+      })}
+    </div>
+  );
+};
+
+const UncompletedTodos = (props: TodosProps) => {
+  const { todos } = props;
+
+  if (!todos || !todos.length) {
+    return null;
+  }
+
+  return (
+    <div>
+      <h1>Completed todos</h1>
+      {todos.map((todo) => {
+        return (
+          <li key={todo.id}>
+            <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
+          </li>
+        );
+      })}
+    </div>
+  );
+};
+
 export const TodosOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [todos, setTodos] = useState<{
@@ -38,31 +84,8 @@ export const TodosOverview = () => {
 
   return (
     <div>
-      {Boolean(todos?.completedTodos?.length) && (
-        <div>
-          <h1>Completed todos</h1>
-          {todos.completedTodos.map((todo) => {
-            return (
-              <li key={todo.id}>
-                <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
-              </li>
-            );
-          })}
-        </div>
-      )}
-
-      {Boolean(todos?.uncompletedTodos?.length) && (
-        <div>
-          <h1>Uncompleted todos</h1>
-          {todos.uncompletedTodos.map((todo) => {
-            return (
-              <li key={todo.id}>
-                <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
-              </li>
-            );
-          })}
-        </div>
-      )}
+      <CompletedTodos todos={todos.completedTodos} />
+      <UncompletedTodos todos={todos.uncompletedTodos} />
     </div>
   );
 };
