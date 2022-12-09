@@ -1,11 +1,18 @@
-import { useState } from "react";
+import {
+  ChangeEventHandler,
+  FormEvent,
+  FormEventHandler,
+  MouseEvent,
+  ReactEventHandler,
+  useState,
+} from "react";
 
 export const TodosAdd = () => {
   const [todoName, setTodoName] = useState("");
 
-  const handleSubmit = async (event: any) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const todoFormData = new FormData(event.target);
+    const todoFormData = new FormData(event.currentTarget);
 
     await fetch("http://localhost:3000/todos", {
       method: "POST",
