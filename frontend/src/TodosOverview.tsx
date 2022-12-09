@@ -12,7 +12,6 @@ const filterUncompletedTodos = (todo: Todo) => {
 
 export const TodosOverview = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [completedTodos, setCompletedTodos] = useState<Todo[]>([]);
   const [uncompletedTodos, setUncompletedTodos] = useState<Todo[]>([]);
 
@@ -21,7 +20,6 @@ export const TodosOverview = () => {
       const data = await fetch("http://localhost:3000/todos");
 
       const res: Todo[] = await data.json();
-      setTodos(res);
       setCompletedTodos(res.filter(filterCompletedTodos));
       setUncompletedTodos(res.filter(filterUncompletedTodos));
       setIsLoading(false);
