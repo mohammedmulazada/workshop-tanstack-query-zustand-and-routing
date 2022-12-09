@@ -1,42 +1,21 @@
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Todo } from "../../types/Todo";
+import { useTodoMutation, useTodoQuery } from "./hooks/useTodo";
 
 export const TodosDetail = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const params = useParams();
-  const navigate = useNavigate();
-
   const { todoId } = params;
-  const [todo, setTodo] = useState<Todo>();
+
+  const { data, isLoading } = useTodoQuery({
+    id: todoId!,
+  });
+
+  const { mutate } = useTodoMutation(todoId!);
+
+  const navigate = useNavigate();
 
   if (!todoId || todoId === undefined) {
     navigate("/");
   }
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const data = await fetch(`http://localhost:3000/todos/${todoId}`);
-
-      const res: Todo = await data.json();
-      setTodo(res);
-      setIsLoading(false);
-    };
-
-    fetchTodos();
-  }, []);
-
-  const handleToggleTodo = async (id: string) => {
-    setIsLoading(true);
-    const data = await fetch(`http://localhost:3000/todos/${todoId}`, {
-      method: "PATCH",
-    });
-
-    const response = await data.json();
-
-    setTodo(response);
-    setIsLoading(false);
-  };
 
   if (isLoading) {
     return <p>...Loading</p>;
@@ -44,17 +23,19 @@ export const TodosDetail = () => {
 
   return (
     <div>
-      {todo && (
+      {data && (
         <div>
-          <span>{todo.text}</span>
+          <span>{data.text}</span>
           <br />
           <span>
-            This todo is {todo.completed ? "completed" : "not completed"}
+            This todo is {data.completed ? "completed" : "not completed"}
           </span>
         </div>
       )}
       {todoId && (
-        <button onClick={() => handleToggleTodo(todoId)}>Toggle todo</button>
+        <button type="button" onClick={() => mutate()}>
+          Toggle todo
+        </button>
       )}
     </div>
   );

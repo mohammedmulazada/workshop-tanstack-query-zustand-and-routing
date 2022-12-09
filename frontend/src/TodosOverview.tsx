@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Todo } from "../../types/Todo";
+import { useTodosQuery } from "./hooks/useTodo";
 
 const filterCompletedTodos = (todo: Todo) => {
   return todo.completed;
@@ -44,11 +44,11 @@ const UncompletedTodos = (props: TodosProps) => {
 
   return (
     <div>
-      <h1>Completed todos</h1>
+      <h1>Uncompleted todos</h1>
       {todos.map((todo) => {
         return (
           <li key={todo.id}>
-            <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
+            <Link to={`/todos/${todo.id}`}>{todo.text}</Link>
           </li>
         );
       })}
@@ -57,26 +57,14 @@ const UncompletedTodos = (props: TodosProps) => {
 };
 
 export const TodosOverview = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [todos, setTodos] = useState<{
-    completedTodos: Todo[];
-    uncompletedTodos: Todo[];
-  }>({ completedTodos: [], uncompletedTodos: [] });
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const data = await fetch("http://localhost:3000/todos");
-
-      const res: Todo[] = await data.json();
-      setTodos({
-        completedTodos: res.filter(filterCompletedTodos),
-        uncompletedTodos: res.filter(filterUncompletedTodos),
-      });
-      setIsLoading(false);
-    };
-
-    fetchTodos();
-  }, []);
+  const { data: todos, isLoading } = useTodosQuery({
+    select: (state) => {
+      return {
+        completedTodos: state.filter(filterCompletedTodos),
+        uncompletedTodos: state.filter(filterUncompletedTodos),
+      };
+    },
+  });
 
   if (isLoading) {
     return <p>hang on... loading all todos...</p>;
@@ -84,8 +72,8 @@ export const TodosOverview = () => {
 
   return (
     <div>
-      <CompletedTodos todos={todos.completedTodos} />
-      <UncompletedTodos todos={todos.uncompletedTodos} />
+      <CompletedTodos todos={todos?.completedTodos} />
+      <UncompletedTodos todos={todos?.uncompletedTodos} />
     </div>
   );
 };
