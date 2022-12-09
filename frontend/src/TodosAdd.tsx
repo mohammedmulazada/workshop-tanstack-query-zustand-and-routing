@@ -1,21 +1,17 @@
 import { FormEvent, useState } from "react";
+import { useTodoAddMutation } from "./hooks/useTodo";
 
 export const TodosAdd = () => {
   const [todoName, setTodoName] = useState("");
+  const mutate = useTodoAddMutation().mutate;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const todoFormData = new FormData(event.currentTarget);
-
-    await fetch("http://localhost:3000/todos", {
-      method: "POST",
-      body: JSON.stringify({
-        text: todoFormData.get("todo"),
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const todoNewName = todoFormData.get("todo");
+    if (todoNewName) {
+      mutate(todoNewName);
+    }
 
     setTodoName("");
   };

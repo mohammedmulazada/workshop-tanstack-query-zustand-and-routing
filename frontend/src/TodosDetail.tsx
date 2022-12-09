@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useTodoMutation, useTodoQuery } from "./hooks/useTodo";
+import { useTodoToggleMutation, useTodoQuery } from "./hooks/useTodo";
 
 export const TodosDetail = () => {
   const params = useParams();
@@ -9,7 +9,7 @@ export const TodosDetail = () => {
     id: todoId!,
   });
 
-  const { mutate } = useTodoMutation(todoId!);
+  const { mutate } = useTodoToggleMutation(todoId!);
 
   const navigate = useNavigate();
 

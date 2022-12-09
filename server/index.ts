@@ -35,7 +35,7 @@ const generateId = () => {
   }
 
   // Otherwise, generate a new ID by incrementing the last todo's ID by 1
-  return String(lastTodo.id + 1);
+  return String(Number(lastTodo.id) + 1);
 };
 
 // GET

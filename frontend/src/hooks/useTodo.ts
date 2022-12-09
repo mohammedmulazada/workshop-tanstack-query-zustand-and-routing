@@ -53,7 +53,7 @@ const handleToggleTodo = async (id: string | number) => {
   return response as Todo;
 };
 
-export const useTodoMutation = (id: string | number) => {
+export const useTodoToggleMutation = (id: string | number) => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: () => handleToggleTodo(id),
@@ -84,4 +84,32 @@ export const useTodoMutation = (id: string | number) => {
       });
     },
   });
+};
+
+const handleAddTodo = async (text: string | FormDataEntryValue) => {
+  const data = await fetch("http://localhost:3000/todos", {
+    method: "POST",
+    body: JSON.stringify({
+      text,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const response = await data.json();
+
+  return response;
+};
+
+export const useTodoAddMutation = () => {
+  const queryClient = useQueryClient();
+  return useMutation(
+    async (text: string | FormDataEntryValue) => handleAddTodo(text),
+    {
+      onSuccess: (data) => {
+        queryClient.setQueryData<Todo[]>(["todos"], data);
+      },
+    }
+  );
 };
