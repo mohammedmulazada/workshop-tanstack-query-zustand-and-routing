@@ -3,15 +3,21 @@ import { useTodoToggleMutation, useTodoQuery } from "./hooks/useTodo";
 
 export const TodosDetail = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const { todoId } = params;
+  console.log(params);
+
+  const id = todoId;
+
+  if (typeof id === "undefined") {
+    navigate("/");
+  }
 
   const { data, isLoading } = useTodoQuery({
     id: todoId!,
   });
 
   const { mutate } = useTodoToggleMutation(todoId!);
-
-  const navigate = useNavigate();
 
   if (!todoId || todoId === undefined) {
     navigate("/");

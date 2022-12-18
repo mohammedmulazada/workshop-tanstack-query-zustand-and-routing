@@ -6,6 +6,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import App from "./App";
 import { TodosDetail } from "./TodosDetail";
 import { TodosOverview } from "./TodosOverview";
+import { MyContextProvider } from "./context/TodosCounterContext";
 
 import "./index.css";
 
@@ -29,7 +30,9 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
-      <RouterProvider router={router} />
+      <MyContextProvider>
+        <RouterProvider router={router} />
+      </MyContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

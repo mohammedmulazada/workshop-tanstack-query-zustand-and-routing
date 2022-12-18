@@ -1,33 +1,17 @@
-import {
-  Updater,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Todo } from "../../../types/Todo";
-
-const fetchTodos = async () => {
-  const data = await fetch("http://localhost:3000/todos");
-
-  const res = await data.json();
-
-  return res as Todo[];
-};
-
-const fetchTodo = async (id: number | string) => {
-  const data = await fetch(`http://localhost:3000/todos/${id}`);
-
-  const res = await data.json();
-
-  return res as Todo;
-};
+import {
+  getAllTodos,
+  getTodoById,
+  handleAddTodo,
+} from "../services/TodoServices";
 
 export const useTodosQuery = <T = Todo[]>({
   select,
 }: {
   select?: (data: Todo[]) => T;
 }) =>
-  useQuery(["todos"], fetchTodos, {
+  useQuery(["todos"], getAllTodos, {
     initialData: [],
     select,
   });
@@ -39,7 +23,7 @@ export const useTodoQuery = <T = Todo>({
   select?: (data: Todo) => T;
   id: number | string;
 }) =>
-  useQuery(["todo", id], () => fetchTodo(id), {
+  useQuery(["todo", id], () => getTodoById(id), {
     select,
   });
 
@@ -58,7 +42,6 @@ export const useTodoToggleMutation = (id: string | number) => {
   return useMutation({
     mutationFn: () => handleToggleTodo(id),
     onSuccess: (data, variables) => {
-      console.log(data, variables);
       queryClient.setQueryData<Todo[]>(["todos"], (prevData) => {
         if (!prevData?.length) {
           return;
@@ -86,29 +69,19 @@ export const useTodoToggleMutation = (id: string | number) => {
   });
 };
 
-const handleAddTodo = async (text: string | FormDataEntryValue) => {
-  const data = await fetch("http://localhost:3000/todos", {
-    method: "POST",
-    body: JSON.stringify({
-      text,
-    }),
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  const response = await data.json();
-
-  return response;
-};
-
 export const useTodoAddMutation = () => {
   const queryClient = useQueryClient();
   return useMutation(
     async (text: string | FormDataEntryValue) => handleAddTodo(text),
     {
       onSuccess: (data) => {
-        queryClient.setQueryData<Todo[]>(["todos"], data);
+        queryClient.setQueryData<Todo[]>(["todos"], (a) => {
+          if (a?.length) {
+            return [...a, data];
+          }
+
+          return [data];
+        });
       },
     }
   );

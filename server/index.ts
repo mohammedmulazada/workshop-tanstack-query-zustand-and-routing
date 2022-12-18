@@ -23,6 +23,11 @@ const todos: Todo[] = [
     text: "Do groceries",
     completed: false,
   },
+  {
+    id: "2",
+    text: "Divide by 0",
+    completed: true,
+  },
 ];
 
 const generateId = () => {
@@ -55,7 +60,7 @@ app.post("/todos", (req: express.Request, res: express.Response) => {
 
   todos.push(todo);
 
-  res.json(todos);
+  res.json(todo);
 });
 
 // PATCH /todos/:id

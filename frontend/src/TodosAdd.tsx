@@ -1,8 +1,10 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
+import { MyContext } from "./context/TodosCounterContext";
 import { useTodoAddMutation } from "./hooks/useTodo";
 
 export const TodosAdd = () => {
   const [todoName, setTodoName] = useState("");
+  const { incrementValue } = useContext(MyContext);
   const mutate = useTodoAddMutation().mutate;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -11,9 +13,9 @@ export const TodosAdd = () => {
     const todoNewName = todoFormData.get("todo");
     if (todoNewName) {
       mutate(todoNewName);
+      setTodoName("");
+      incrementValue();
     }
-
-    setTodoName("");
   };
   return (
     <form className="addtodo" method="POST" onSubmit={handleSubmit}>
