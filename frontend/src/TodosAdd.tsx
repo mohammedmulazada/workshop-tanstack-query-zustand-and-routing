@@ -1,23 +1,27 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
+import { MyContext } from "./context/TodosCounterContext";
+import { handleAddTodo } from "./services/TodoServices";
 
 export const TodosAdd = () => {
   const [todoName, setTodoName] = useState("");
+  const { incrementValue } = useContext(MyContext);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const todoFormData = new FormData(event.currentTarget);
 
-    await fetch("http://localhost:3000/todos", {
-      method: "POST",
-      body: JSON.stringify({
-        text: todoFormData.get("todo"),
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const todoValue = todoFormData.get("todo");
 
-    setTodoName("");
+      if (!todoValue) {
+        return;
+      }
+
+      await handleAddTodo(todoValue);
+
+      setTodoName("");
+      incrementValue();
+    } catch (error) {}
   };
   return (
     <form className="addtodo" method="POST" onSubmit={handleSubmit}>

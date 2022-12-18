@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Todo } from "../../types/Todo";
+import { getAllTodos } from "./services/TodoServices";
 
 const filterCompletedTodos = (todo: Todo) => {
   return todo.completed;
@@ -44,11 +45,11 @@ const UncompletedTodos = (props: TodosProps) => {
 
   return (
     <div>
-      <h1>Completed todos</h1>
+      <h1>Uncompleted todos</h1>
       {todos.map((todo) => {
         return (
           <li key={todo.id}>
-            <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
+            <Link to={`/todos/${todo.id}`}>{todo.text}</Link>
           </li>
         );
       })}
@@ -65,12 +66,11 @@ export const TodosOverview = () => {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const data = await fetch("http://localhost:3000/todos");
+      const data = await getAllTodos();
 
-      const res: Todo[] = await data.json();
       setTodos({
-        completedTodos: res.filter(filterCompletedTodos),
-        uncompletedTodos: res.filter(filterUncompletedTodos),
+        completedTodos: data.filter(filterCompletedTodos),
+        uncompletedTodos: data.filter(filterUncompletedTodos),
       });
       setIsLoading(false);
     };

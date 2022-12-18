@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Todo } from "../../types/Todo";
+import { getTodoById, handleToggleTodo } from "./services/TodoServices";
 
 export const TodosDetail = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,9 +17,10 @@ export const TodosDetail = () => {
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const data = await fetch(`http://localhost:3000/todos/${todoId}`);
-
-      const res: Todo = await data.json();
+      if (!todoId) {
+        return;
+      }
+      const res: Todo = await getTodoById(todoId);
       setTodo(res);
       setIsLoading(false);
     };
@@ -26,13 +28,10 @@ export const TodosDetail = () => {
     fetchTodos();
   }, []);
 
-  const handleToggleTodo = async (id: string) => {
+  const toggleTodo = async (id: string) => {
     setIsLoading(true);
-    const data = await fetch(`http://localhost:3000/todos/${todoId}`, {
-      method: "PATCH",
-    });
 
-    const response = await data.json();
+    const response = await handleToggleTodo(id);
 
     setTodo(response);
     setIsLoading(false);
@@ -54,7 +53,7 @@ export const TodosDetail = () => {
         </div>
       )}
       {todoId && (
-        <button onClick={() => handleToggleTodo(todoId)}>Toggle todo</button>
+        <button onClick={() => toggleTodo(todoId)}>Toggle todo</button>
       )}
     </div>
   );
