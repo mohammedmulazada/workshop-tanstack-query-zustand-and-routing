@@ -12,46 +12,36 @@ const filterUncompletedTodos = (todo: Todo) => {
 
 type TodosProps = {
   todos: Todo[];
+  completed?: boolean;
 };
 
-const CompletedTodos = (props: TodosProps) => {
-  const { todos } = props;
+const TodosList = (props: TodosProps) => {
+  const { todos, completed } = props;
+
+  const title = completed ? "Completed todo's" : "Uncompleted todo's";
 
   if (!todos || !todos.length) {
     return null;
   }
 
-  return (
-    <div>
-      <h1>Completed todos</h1>
-      {todos.map((todo) => {
-        return (
-          <li key={todo.id}>
-            <Link to={`/todos/${todo.id}`}> {todo.text}</Link>
-          </li>
-        );
-      })}
-    </div>
-  );
-};
-
-const UncompletedTodos = (props: TodosProps) => {
-  const { todos } = props;
-
-  if (!todos || !todos.length) {
-    return null;
-  }
+  const classes = completed
+    ? "py-8 px-8 my-4 max-w-sm bg-emerald-700 text-black rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6"
+    : "py-8 px-8 my-4 max-w-sm bg-gray-300 text-black rounded-xl shadow-lg space-y-2 sm:py-4 sm:flex sm:items-center sm:space-y-0 sm:space-x-6";
 
   return (
-    <div>
-      <h1>Uncompleted todos</h1>
-      {todos.map((todo) => {
-        return (
-          <li key={todo.id}>
-            <Link to={`/todos/${todo.id}`}>{todo.text}</Link>
-          </li>
-        );
-      })}
+    <div className="py-8">
+      <h1 className="py-8">{title}</h1>
+      <ul>
+        {todos.map((todo) => {
+          return (
+            <Link key={todo.id} to={`/todos/${todo.id}`}>
+              <li key={todo.id} className={classes}>
+                {todo.text}
+              </li>
+            </Link>
+          );
+        })}
+      </ul>
     </div>
   );
 };
@@ -72,8 +62,8 @@ export const TodosOverview = () => {
 
   return (
     <div>
-      <CompletedTodos todos={todos?.completedTodos} />
-      <UncompletedTodos todos={todos?.uncompletedTodos} />
+      <TodosList completed todos={todos.completedTodos} />
+      <TodosList todos={todos.uncompletedTodos} />
     </div>
   );
 };

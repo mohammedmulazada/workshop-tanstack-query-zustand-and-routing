@@ -28,7 +28,7 @@ export const useTodoQuery = <T = Todo>({
   });
 
 const handleToggleTodo = async (id: string | number) => {
-  const data = await fetch(`http://localhost:3000/todos/${id}`, {
+  const data = await fetch(`http://localhost:3333/todos/${id}`, {
     method: "PATCH",
   });
 

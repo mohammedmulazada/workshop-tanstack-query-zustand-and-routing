@@ -15,6 +15,6 @@ I setup a simple node express back-end that has endpoints related to todos (ever
 5. In the server folder, type `npm start`
 6. In the front-end folder, type `npm run dev`
 
-If done correctly, you should be able to get data back if you visit this url: http://localhost:3000/todos
+If done correctly, you should be able to get data back if you visit this url: http://localhost:3333/todos
 
 The front-end should be viewable at http://localhost:5173/.

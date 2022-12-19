@@ -1,28 +1,28 @@
 import { useContext } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 import "./App.css";
-import { MyContext } from "./context/TodosCounterContext";
+import { TodosContext } from "./context/TodosCounterContext";
 import { TodosAdd } from "./TodosAdd";
 
 function App() {
   const params = useParams();
   const { todoId } = params;
 
-  const { value } = useContext(MyContext);
+  const { value } = useContext(TodosContext);
 
   return (
     <div className="App">
-      <header>
-        <span>Amount of todos added: {value}</span>
-        <nav>
-          <ul>
-            {todoId && (
+      <header className="px-8 py-8 fixed top-0 left-0 w-full flex">
+        <span className="pr-8">Amount of todos added: {value}</span>
+        {todoId && (
+          <nav>
+            <ul>
               <li>
-                <Link to={""}> Home</Link>
+                <Link to={""}>Back to home</Link>
               </li>
-            )}
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        )}
       </header>
       <Outlet />
       <TodosAdd />
