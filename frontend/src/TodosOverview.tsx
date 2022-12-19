@@ -13,8 +13,7 @@ const filterUncompletedTodos = (todo: Todo) => {
 
 type TodosProps = {
   todos: Todo[];
-  title: string;
-  completed: boolean;
+  completed?: boolean;
 };
 
 const TodosList = (props: TodosProps) => {
