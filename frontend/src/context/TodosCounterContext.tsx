@@ -1,24 +1,34 @@
 import { createContext, ReactNode, useState } from "react";
 
-export const MyContext = createContext<{
+export const TodosContext = createContext<{
   value: number;
   incrementValue: () => void;
-}>({ value: 0, incrementValue: () => {} });
+  setNewTodoValue: (text: string) => void;
+  todoValue: string;
+}>({
+  value: 0,
+  incrementValue: () => {},
+  setNewTodoValue: () => {},
+  todoValue: "",
+});
 
 type Props = {
   children: ReactNode;
 };
 
-export const MyContextProvider = (props: Props) => {
+export const TodosContextProvider = (props: Props) => {
   const [value, setValue] = useState(0);
+  const [todoValue, setNewTodoValue] = useState("");
 
   const incrementValue = () => {
     setValue((prevValue) => prevValue + 1);
   };
 
   return (
-    <MyContext.Provider value={{ value, incrementValue }}>
+    <TodosContext.Provider
+      value={{ value, incrementValue, setNewTodoValue, todoValue }}
+    >
       {props.children}
-    </MyContext.Provider>
+    </TodosContext.Provider>
   );
 };

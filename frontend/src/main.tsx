@@ -7,7 +7,7 @@ import "./index.css";
 
 import { TodosDetail } from "./TodosDetail";
 import { TodosOverview } from "./TodosOverview";
-import { MyContextProvider } from "./context/TodosCounterContext";
+import { TodosContextProvider } from "./context/TodosCounterContext";
 
 const queryClient = new QueryClient();
 
@@ -28,9 +28,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <MyContextProvider>
+      <TodosContextProvider>
         <RouterProvider router={router} />
-      </MyContextProvider>
+      </TodosContextProvider>
     </QueryClientProvider>
   </React.StrictMode>
 );

@@ -44,12 +44,10 @@ export const TodosDetail = () => {
   return (
     <div>
       {todo && (
-        <div>
-          <span>{todo.text}</span>
+        <div className="flex flex-col">
+          <span>Title: {todo.text}</span>
           <br />
-          <span>
-            This todo is {todo.completed ? "completed" : "not completed"}
-          </span>
+          <span>Status: {todo.completed ? "completed" : "not completed"}</span>
         </div>
       )}
       {todoId && (
