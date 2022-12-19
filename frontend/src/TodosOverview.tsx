@@ -34,10 +34,8 @@ const TodosList = (props: TodosProps) => {
       <ul>
         {todos.map((todo) => {
           return (
-            <Link key={todo.id} to={`/todos/${todo.id}`}>
-              <li key={todo.id} className={classes}>
-                {todo.text}
-              </li>
+            <Link key={`${todo.id}-${todo.text}`} to={`/todos/${todo.id}`}>
+              <li className={classes}>{todo.text}</li>
             </Link>
           );
         })}
@@ -62,8 +60,8 @@ export const TodosOverview = () => {
 
   return (
     <div>
-      <TodosList completed todos={todos.completedTodos} />
-      <TodosList todos={todos.uncompletedTodos} />
+      <TodosList key={"completed"} completed todos={todos.completedTodos} />
+      <TodosList key={"uncompleted"} todos={todos.uncompletedTodos} />
     </div>
   );
 };

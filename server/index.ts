@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { Todo } from "../types/Todo";
+import { v4 as uuidv4 } from "uuid";
 
 const app = express();
 
@@ -14,33 +15,24 @@ const getRandomNumber = (min: number, max: number): number => {
 
 const todos: Todo[] = [
   {
-    id: "1",
+    id: uuidv4(),
     text: "Give a workshop",
     completed: false,
   },
   {
-    id: "2",
+    id: uuidv4(),
     text: "Do groceries",
     completed: false,
   },
   {
-    id: "2",
+    id: uuidv4(),
     text: "Divide by 0",
     completed: true,
   },
 ];
 
 const generateId = () => {
-  // Find the last todo in the list of todos
-  const lastTodo = todos.at(-1);
-
-  // If there are no todos in the list, start the ID at 1
-  if (!lastTodo) {
-    return String(1);
-  }
-
-  // Otherwise, generate a new ID by incrementing the last todo's ID by 1
-  return String(Number(lastTodo.id) + 1);
+  return uuidv4();
 };
 
 // GET

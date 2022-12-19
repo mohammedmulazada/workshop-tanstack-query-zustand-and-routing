@@ -14,5 +14,6 @@ const useCounterStore = create<CounterState>()((set) => ({
   },
 }));
 
-export const useCounter = useCounterStore((state) => state.count);
-export const useCounterActions = useCounterStore((state) => state.actions);
+export const useCounter = () => useCounterStore((state) => state.count);
+export const useCounterActions = () =>
+  useCounterStore((state) => state.actions);

@@ -1,34 +1,41 @@
-import { FormEvent, useContext, useState } from "react";
-import { useTodoAddMutation } from "./hooks/useTodo";
+import { FormEvent, useContext } from "react";
+import {
+  useTodoActions,
+  useTodoAddMutation,
+  useTodoText,
+} from "./hooks/useTodo";
 import { TodosContext } from "./context/TodosCounterContext";
+import { useCounterActions } from "./hooks/useCounter";
 
 const TodosAddInput = () => {
-  const { todoValue, setNewTodoValue } = useContext(TodosContext);
+  const text = useTodoText();
+  const { setText } = useTodoActions();
   return (
     <label>
       Add a todo
       <input
         name="todo"
-        onChange={(e) => setNewTodoValue(e.target.value)}
-        value={todoValue}
+        onChange={(e) => setText(e.target.value)}
+        value={text}
       />
     </label>
   );
 };
 
 export const TodosAdd = () => {
-  const { incrementValue, todoValue, setNewTodoValue } =
-    useContext(TodosContext);
+  const { increment } = useCounterActions();
+  const text = useTodoText();
+  const { setText } = useTodoActions();
 
   const mutate = useTodoAddMutation().mutate;
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (todoValue) {
-      mutate(todoValue);
-      setNewTodoValue("");
-      incrementValue();
+    if (text) {
+      mutate(text);
+      setText("");
+      increment();
     }
   };
   return (

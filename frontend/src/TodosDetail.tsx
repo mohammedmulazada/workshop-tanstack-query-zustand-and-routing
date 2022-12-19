@@ -5,7 +5,6 @@ export const TodosDetail = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { todoId } = params;
-  console.log(params);
 
   const id = todoId;
 

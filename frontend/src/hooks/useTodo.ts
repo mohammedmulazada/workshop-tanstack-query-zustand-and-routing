@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import create from "zustand";
 import { Todo } from "../../../types/Todo";
 import {
   getAllTodos,
@@ -58,7 +59,6 @@ export const useTodoToggleMutation = (id: string | number) => {
       });
 
       queryClient.setQueryData<Todo>(["todo", data.id], (prevData) => {
-        console.log(prevData, data);
         if (!prevData) {
           return;
         }
@@ -86,3 +86,20 @@ export const useTodoAddMutation = () => {
     }
   );
 };
+
+type TodoState = {
+  text: string;
+  actions: {
+    setText: (text: string) => void;
+  };
+};
+
+const useTodoStore = create<TodoState>()((set) => ({
+  text: "",
+  actions: {
+    setText: (text: string) => set({ text }),
+  },
+}));
+
+export const useTodoText = () => useTodoStore((state) => state.text);
+export const useTodoActions = () => useTodoStore((state) => state.actions);
