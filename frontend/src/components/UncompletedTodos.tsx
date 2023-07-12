@@ -17,10 +17,10 @@ export const UncompletedTodos = () => {
   if (isLoading || !uncompletedTodos || !uncompletedTodos.length) {
     return (
       <TodoContainer title={<Skeleton />}>
-        {Array.from({ length: 12 }).map((item) => {
+        {Array.from({ length: 12 }).map((_, i) => {
           return (
             <li
-              key={item as number}
+              key={i}
               className="h-full flex flex-col py-8 px-8 my-4 bg-white text-black rounded-xl shadow-lg space-y-4"
             >
               <h2 className="text-lg font-semibold">

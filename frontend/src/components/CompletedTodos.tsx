@@ -20,10 +20,10 @@ export const CompletedTodos = () => {
   if (isLoading) {
     return (
       <TodoContainer title={<Skeleton />}>
-        {Array.from({ length: 2 }).map((item) => {
+        {Array.from({ length: 2 }).map((_, i) => {
           return (
             <li
-              key={item as number}
+              key={i}
               className={`${classes} flex flex-col justify-between h-full pointer-events-none`}
             >
               <h2 className="text-lg font-semibold mb-auto">{<Skeleton />}</h2>

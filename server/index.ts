@@ -36,7 +36,7 @@ const todos: Todo[] = [
   {
     id: "5",
     text: "Create a perpetual motion machine",
-    completed: false,
+    completed: true,
   },
   {
     id: "6",
@@ -46,7 +46,7 @@ const todos: Todo[] = [
   {
     id: "7",
     text: "Convince the dog it's not a cat",
-    completed: false,
+    completed: true,
   },
   {
     id: "8",
@@ -56,7 +56,7 @@ const todos: Todo[] = [
   {
     id: "9",
     text: "Invent a new color",
-    completed: false,
+    completed: true,
   },
   {
     id: "10",
