@@ -6,83 +6,49 @@ import {
   handleAddTodo,
 } from "../services/TodoServices";
 
+// create a hook (useTodosQuery) that fetches all todos
+// it should make use of the getAllTodos service
+// It should accept an optional parameter called select
+// select is a function that returns data
+// the typing is a bit tricky, to save time I created the variables with typings for you
+
+type TodoQuerySelect<T> = (data: Todo[]) => T;
+
+type TodoQueryOptions<T> = {
+  select?: TodoQuerySelect<T>;
+};
+
 export const useTodosQuery = <T = Todo[]>({
   select,
-}: {
-  select?: (data: Todo[]) => T;
-}) =>
-  useQuery(["todos"], getAllTodos, {
-    initialData: [],
-    select,
-  });
+}: TodoQueryOptions<T>) => {};
+
+type SingleTodoQuerySelect<T> = {
+  select: (data: Todo) => T;
+  id: string;
+};
+
+// create a hook (useTodoQuery) that fetches a specific todo by id
+// it should make use of the getTodoById service
+// It should accept an optional parameter called select
+// It should accept a required parameter id
 
 export const useTodoQuery = <T = Todo>({
   select,
   id,
-}: {
-  select?: (data: Todo) => T;
-  id: number | string;
-}) =>
-  useQuery(["todo", id], () => getTodoById(id), {
-    select,
-  });
+}: SingleTodoQuerySelect<T>) => {};
 
-const handleToggleTodo = async (id: string | number) => {
-  const data = await fetch(`http://localhost:3333/todos/${id}`, {
-    method: "PATCH",
-  });
-
-  const response = await data.json();
-
-  return response as Todo;
-};
+// create a mutation hook (useTodoToggleMutation) that toggles the status of a todo
+// it should make use of the handleToggleTodo service
+// It should accept a required parameter id
 
 export const useTodoToggleMutation = (id: string | number) => {
   const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: () => handleToggleTodo(id),
-    onSuccess: (data, variables) => {
-      queryClient.setQueryData<Todo[]>(["todos"], (prevData) => {
-        if (!prevData?.length) {
-          return;
-        }
-        const updatedTodos = prevData.map((todo) => {
-          if (todo.id === data.id) {
-            return { ...todo, completed: data.completed };
-          }
-
-          return todo;
-        });
-
-        return updatedTodos;
-      });
-
-      queryClient.setQueryData<Todo>(["todo", data.id], (prevData) => {
-        console.log(prevData, data);
-        if (!prevData) {
-          return;
-        }
-
-        return { ...prevData, ...data };
-      });
-    },
-  });
 };
+
+// create a mutation hook (useTodoAddMutation) that toggles the status of a todo
+// it should make use of the handleAddTodo service
+// It should accept a required parameter text so that a todo can be created
 
 export const useTodoAddMutation = () => {
   const queryClient = useQueryClient();
-  return useMutation(
-    async (text: string | FormDataEntryValue) => handleAddTodo(text),
-    {
-      onSuccess: (data) => {
-        queryClient.setQueryData<Todo[]>(["todos"], (a) => {
-          if (a?.length) {
-            return [...a, data];
-          }
-
-          return [data];
-        });
-      },
-    }
-  );
 };
