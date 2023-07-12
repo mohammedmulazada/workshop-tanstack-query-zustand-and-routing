@@ -12,10 +12,8 @@ import {
 // select is a function that returns data
 // the typing is a bit tricky, to save time I created the variables with typings for you
 
-type TodoQuerySelect<T> = (data: Todo[]) => T;
-
 type TodoQueryOptions<T> = {
-  select?: TodoQuerySelect<T>;
+  select?: (data: Todo[]) => T;
 };
 
 export const useTodosQuery = <T = Todo[]>({

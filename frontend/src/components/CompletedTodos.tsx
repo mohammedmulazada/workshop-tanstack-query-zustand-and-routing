@@ -20,7 +20,7 @@ export const CompletedTodos = () => {
 
   const title = "Completed todo's";
 
-  if (isLoading || !completedTodos || !completedTodos.length) {
+  if (isLoading) {
     return (
       <TodoContainer title={<Skeleton />}>
         {Array.from({ length: 2 }).map((item) => {
