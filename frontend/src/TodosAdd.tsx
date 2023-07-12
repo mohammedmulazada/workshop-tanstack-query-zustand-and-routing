@@ -1,27 +1,22 @@
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleAddTodo } from "./services/TodoServices";
 
 const TodosAddInput = () => {
-  return null;
   return (
     <label>
       Add a todo
-      <input
-        name="todo"
-        onChange={(e) => setNewTodoValue(e.target.value)}
-        value={todoValue}
-      />
+      <input name="todo" type="text" />
     </label>
   );
 };
 
 export const TodosAdd = () => {
-  return null;
   const navigate = useNavigate();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const todoValue = new FormData(event.currentTarget).get("todo");
 
     try {
       if (!todoValue) {
@@ -29,9 +24,6 @@ export const TodosAdd = () => {
       }
 
       await handleAddTodo(todoValue);
-
-      setNewTodoValue("");
-      incrementValue();
 
       navigate("/");
     } catch (error) {}
