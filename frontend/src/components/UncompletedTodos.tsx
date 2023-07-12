@@ -1,26 +1,20 @@
-import { useSelector } from "react-redux";
-import {
-  selectAllUncompletedTodos,
-  selectTodoLoadingState,
-} from "../store/selectors/todoSelectors";
-import { useAppDispatch } from "../store/createStore";
-import { toggleTodoThunk } from "../store/thunk/toggleTodoThunk";
 import { Link } from "react-router-dom";
 import { TodoContainer } from "./TodoContainer";
 import Skeleton from "react-loading-skeleton";
+import { useTodoToggleMutation, useTodosQuery } from "../hooks/useTodo";
 
 const classes =
   "f-hull flex flex-col py-8 px-8 my-4 bg-gray-300 text-black rounded-xl shadow-lg space-y-4";
 
 export const UncompletedTodos = () => {
-  const completedTodos = useSelector(selectAllUncompletedTodos);
-  const isLoading = useSelector(selectTodoLoadingState);
-
-  const dispatch = useAppDispatch();
+  const { data: uncompletedTodos, isLoading } = useTodosQuery({
+    select: (data) => data.filter((todo) => !todo.completed),
+  });
+  const { mutate, variables, isLoading: isMutating } = useTodoToggleMutation();
 
   const title = "Uncompleted todo's";
 
-  if (isLoading || !completedTodos || !completedTodos.length) {
+  if (isLoading || !uncompletedTodos || !uncompletedTodos.length) {
     return (
       <TodoContainer title={<Skeleton />}>
         {Array.from({ length: 12 }).map((item) => {
@@ -45,21 +39,19 @@ export const UncompletedTodos = () => {
     );
   }
 
-  const handleButtonClick = async (id: number | string) => {
-    await dispatch(toggleTodoThunk(id));
-  };
-
   return (
     <TodoContainer title={title}>
-      {completedTodos.map((todo) => {
+      {uncompletedTodos.map((todo) => {
         return (
           <li key={todo.id} className={classes}>
             <h2 className="text-lg font-semibold">{todo.text}</h2>
             <button
               className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 text-center"
-              onClick={() => handleButtonClick(todo.id)}
+              onClick={() => mutate(todo.id as string)}
             >
-              Toggle todo
+              {isMutating && todo.id.toString() === variables?.toString()
+                ? "Loading"
+                : "Toggle to do"}
             </button>
             <Link
               className="p-2 bg-indigo-500 text-white rounded shadow hover:bg-indigo-600 text-center"

@@ -3,7 +3,7 @@ import { Todo } from "../../../types/Todo";
 import {
   getAllTodos,
   getTodoById,
-  handleAddTodo,
+  handleToggleTodo,
 } from "../services/TodoServices";
 
 // create a hook (useTodosQuery) that fetches all todos
@@ -18,10 +18,12 @@ type TodoQueryOptions<T> = {
 
 export const useTodosQuery = <T = Todo[]>({
   select,
-}: TodoQueryOptions<T>) => {};
+}: TodoQueryOptions<T> = {}) => {
+  return useQuery({ queryKey: ["todos"], queryFn: getAllTodos, select });
+};
 
 type SingleTodoQuerySelect<T> = {
-  select: (data: Todo) => T;
+  select?: (data: Todo) => T;
   id: string;
 };
 
@@ -33,14 +35,30 @@ type SingleTodoQuerySelect<T> = {
 export const useTodoQuery = <T = Todo>({
   select,
   id,
-}: SingleTodoQuerySelect<T>) => {};
+}: SingleTodoQuerySelect<T>) => {
+  return useQuery({
+    queryKey: ["todo", id],
+    queryFn: () => getTodoById(id),
+    select,
+  });
+};
 
 // create a mutation hook (useTodoToggleMutation) that toggles the status of a todo
 // it should make use of the handleToggleTodo service
 // It should accept a required parameter id
 
-export const useTodoToggleMutation = (id: string | number) => {
+export const useTodoToggleMutation = () => {
   const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: number | string) => handleToggleTodo(id),
+    onSettled: (data) => {
+      queryClient.setQueryData<Todo>(["todo", data?.id], () => {
+        return data;
+      });
+      return queryClient.invalidateQueries(["todos"]);
+    },
+  });
 };
 
 // create a mutation hook (useTodoAddMutation) that toggles the status of a todo

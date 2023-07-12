@@ -1,40 +1,19 @@
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Todo } from "../../types/Todo";
-import { getTodoById, handleToggleTodo } from "./services/TodoServices";
+import { useTodoQuery, useTodoToggleMutation } from "./hooks/useTodo";
 
 export const TodosDetail = () => {
-  const [isLoading, setIsLoading] = useState(true);
   const params = useParams();
   const navigate = useNavigate();
-
   const { todoId } = params;
-  const [todo, setTodo] = useState<Todo>();
 
   if (!todoId || todoId === undefined) {
     navigate("/");
   }
-
-  useEffect(() => {
-    const fetchTodos = async () => {
-      if (!todoId) {
-        return;
-      }
-      const res: Todo = await getTodoById(todoId);
-      setTodo(res);
-      setIsLoading(false);
-    };
-
-    fetchTodos();
-  }, []);
+  const { data: todo, isLoading } = useTodoQuery({ id: todoId as string });
+  const { mutate, isLoading: isMutating } = useTodoToggleMutation();
 
   const toggleTodo = async (id: string) => {
-    setIsLoading(true);
-
-    const response = await handleToggleTodo(id);
-
-    setTodo(response);
-    setIsLoading(false);
+    mutate(todoId as string);
   };
 
   if (isLoading) {
@@ -60,7 +39,7 @@ export const TodosDetail = () => {
           className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={() => toggleTodo(todoId)}
         >
-          Toggle todo
+          {isMutating ? "Mutating" : "Toggle todo"}
         </button>
       )}
     </div>

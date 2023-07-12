@@ -1,22 +1,19 @@
-import { useSelector } from "react-redux";
-import {
-  selectAllCompletedTodos,
-  selectTodoLoadingState,
-} from "../store/selectors/todoSelectors";
-import { useAppDispatch } from "../store/createStore";
-import { toggleTodoThunk } from "../store/thunk/toggleTodoThunk";
 import { Link } from "react-router-dom";
 import { TodoContainer } from "./TodoContainer";
 import Skeleton from "react-loading-skeleton";
+import { useTodoToggleMutation, useTodosQuery } from "../hooks/useTodo";
 
 const classes =
   "flex flex-col py-8 px-8 my-4 bg-emerald-700 text-black rounded-xl shadow-lg space-y-4 h-full";
 
 export const CompletedTodos = () => {
-  const completedTodos = useSelector(selectAllCompletedTodos);
-  const isLoading = useSelector(selectTodoLoadingState);
+  const { data: completedTodos, isLoading } = useTodosQuery({
+    select: (data) => data.filter((todo) => todo.completed),
+  });
+  const { mutate } = useTodoToggleMutation();
 
-  const dispatch = useAppDispatch();
+  // const completedTodos = useSelector(selectAllCompletedTodos);
+  // const isLoading = useSelector(selectTodoLoadingState);
 
   const title = "Completed todo's";
 
@@ -45,13 +42,9 @@ export const CompletedTodos = () => {
     );
   }
 
-  const handleButtonClick = async (id: number | string) => {
-    await dispatch(toggleTodoThunk(id));
-  };
-
   return (
     <TodoContainer title={title}>
-      {completedTodos.map((todo) => {
+      {completedTodos?.map((todo) => {
         return (
           <li
             key={todo.id}
@@ -61,7 +54,7 @@ export const CompletedTodos = () => {
             <div className="flex flex-col space-y-2 mt-2">
               <button
                 className="p-2 bg-blue-500 text-white rounded shadow hover:bg-blue-600 text-center"
-                onClick={() => handleButtonClick(todo.id)}
+                onClick={() => mutate(todo.id)}
               >
                 Toggle todo
               </button>
