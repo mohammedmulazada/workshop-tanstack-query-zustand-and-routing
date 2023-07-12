@@ -3,3 +3,5 @@ export type Todo = {
   text: string;
   completed: boolean;
 };
+
+export type AddTodo = Omit<Todo, "id" | "completed">;

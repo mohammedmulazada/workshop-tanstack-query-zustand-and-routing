@@ -24,9 +24,104 @@ const todos: Todo[] = [
     completed: false,
   },
   {
-    id: "2",
+    id: "3",
     text: "Divide by 0",
     completed: true,
+  },
+  {
+    id: "4",
+    text: "Figure out why fridge light turns off",
+    completed: false,
+  },
+  {
+    id: "5",
+    text: "Create a perpetual motion machine",
+    completed: false,
+  },
+  {
+    id: "6",
+    text: "Prove cats are liquid",
+    completed: false,
+  },
+  {
+    id: "7",
+    text: "Convince the dog it's not a cat",
+    completed: false,
+  },
+  {
+    id: "8",
+    text: "Count all the rice grains in a bag",
+    completed: false,
+  },
+  {
+    id: "9",
+    text: "Invent a new color",
+    completed: false,
+  },
+  {
+    id: "10",
+    text: "Put together IKEA furniture without leftover parts",
+    completed: false,
+  },
+  {
+    id: "11",
+    text: "Catch a unicorn",
+    completed: false,
+  },
+  {
+    id: "12",
+    text: "Find out where socks disappear to in the laundry",
+    completed: false,
+  },
+  {
+    id: "13",
+    text: "Have a chat with Siri about existentialism",
+    completed: false,
+  },
+  {
+    id: "14",
+    text: "Teach a goldfish to bark",
+    completed: false,
+  },
+  {
+    id: "15",
+    text: "Create an origami swan out of spaghetti",
+    completed: false,
+  },
+  {
+    id: "16",
+    text: "Translate Shakespeare into emojis",
+    completed: false,
+  },
+  {
+    id: "17",
+    text: "Find the end of the rainbow",
+    completed: false,
+  },
+  {
+    id: "18",
+    text: "Learn to speak unicorn",
+    completed: false,
+  },
+  {
+    id: "19",
+    text: "Invent silent fireworks",
+    completed: false,
+  },
+  {
+    id: "20",
+    text: "Find a way to make Mondays illegal",
+    completed: false,
+  },
+  {
+    id: "21",
+    text: "Try not to think about penguins",
+    completed: false,
+  },
+  {
+    id: "22",
+    text: "Create a new pizza topping that no one's ever thought of",
+    completed: false,
   },
 ];
 
@@ -47,6 +142,20 @@ const generateId = () => {
 app.get("/todos", (_req, res) => {
   setTimeout(() => {
     res.json(todos);
+  }, getRandomNumber(700, 3500));
+});
+
+// GET
+app.get("/todos/completed", (_req, res) => {
+  setTimeout(() => {
+    res.json(todos.filter((todo) => todo.completed));
+  }, getRandomNumber(700, 1500));
+});
+
+// GET
+app.get("/todos/uncompleted", (_req, res) => {
+  setTimeout(() => {
+    res.json(todos.filter((todo) => !todo.completed));
   }, getRandomNumber(700, 1500));
 });
 
@@ -72,7 +181,7 @@ app.patch("/todos/:id", (req: express.Request, res: express.Response) => {
 
     setTimeout(() => {
       res.json(todo);
-    }, getRandomNumber(700, 1000));
+    }, getRandomNumber(1500, 3000));
   } else {
     res.sendStatus(404);
   }

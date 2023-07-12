@@ -1,10 +1,9 @@
 import { FormEvent, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TodosContext } from "./context/TodosCounterContext";
 import { handleAddTodo } from "./services/TodoServices";
 
 const TodosAddInput = () => {
-  const { todoValue, setNewTodoValue } = useContext(TodosContext);
+  return null;
   return (
     <label>
       Add a todo
@@ -18,8 +17,7 @@ const TodosAddInput = () => {
 };
 
 export const TodosAdd = () => {
-  const { incrementValue, todoValue, setNewTodoValue } =
-    useContext(TodosContext);
+  return null;
   const navigate = useNavigate();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
