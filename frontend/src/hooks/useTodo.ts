@@ -1,10 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { Todo } from "../../../types/Todo";
-import {
-  getAllTodos,
-  getTodoById,
-  handleAddTodo,
-} from "../services/TodoServices";
 
 // create a hook (useTodosQuery) that fetches all todos
 // it should make use of the getAllTodos service
