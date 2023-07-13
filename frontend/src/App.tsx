@@ -1,17 +1,14 @@
 import { Link, Outlet, useParams } from "react-router-dom";
-import "./App.css";
 import { TodosAdd } from "./TodosAdd";
-import { useSelector } from "react-redux";
-import {
-  selectAllCompletedTodos,
-  selectAllUncompletedTodos,
-} from "./store/selectors/todoSelectors";
 import Skeleton from "react-loading-skeleton";
+import { useTodosQuery } from "./hooks/useTodo";
+import "./App.css";
 
 function App() {
-  const amountOfCompletedTodos = useSelector(selectAllCompletedTodos).length;
-  const amountOfUncompletedTodos = useSelector(
-    selectAllUncompletedTodos
+  const { data } = useTodosQuery({ select: (data) => data });
+  const amountOfCompletedTodos = data?.filter((todo) => todo.completed).length;
+  const amountOfUncompletedTodos = data?.filter(
+    (todo) => !todo.completed
   ).length;
   const params = useParams();
   const { todoId } = params;

@@ -1,6 +1,7 @@
 import { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { handleAddTodo } from "./services/TodoServices";
+import { useTodoAddMutation } from "./hooks/useTodo";
 
 const TodosAddInput = () => {
   return (
@@ -12,7 +13,7 @@ const TodosAddInput = () => {
 };
 
 export const TodosAdd = () => {
-  const navigate = useNavigate();
+  const { mutate } = useTodoAddMutation();
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -23,9 +24,10 @@ export const TodosAdd = () => {
         return;
       }
 
-      await handleAddTodo(todoValue);
+      // await handleAddTodo(todoValue);
+      mutate(todoValue as string);
 
-      navigate("/");
+      event.currentTarget.reset();
     } catch (error) {}
   };
   return (

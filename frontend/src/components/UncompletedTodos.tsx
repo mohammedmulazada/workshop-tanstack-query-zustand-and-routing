@@ -4,10 +4,14 @@ import Skeleton from "react-loading-skeleton";
 import { useTodoToggleMutation, useTodosQuery } from "../hooks/useTodo";
 
 const classes =
-  "f-hull flex flex-col py-8 px-8 my-4 bg-gray-300 text-black rounded-xl shadow-lg space-y-4";
+  "h-full flex flex-col py-8 px-8 my-4 bg-gray-300 text-black rounded-xl shadow-lg space-y-4";
 
 export const UncompletedTodos = () => {
-  const { data: uncompletedTodos, isLoading } = useTodosQuery({
+  const {
+    data: uncompletedTodos,
+    isLoading,
+    isFetching,
+  } = useTodosQuery({
     select: (data) => data.filter((todo) => !todo.completed),
   });
   const { mutate, variables, isLoading: isMutating } = useTodoToggleMutation();
@@ -40,7 +44,7 @@ export const UncompletedTodos = () => {
   }
 
   return (
-    <TodoContainer title={title}>
+    <TodoContainer title={`${title} ${isFetching ? "- refetching" : ""}`}>
       {uncompletedTodos.map((todo) => {
         return (
           <li key={todo.id} className={classes}>
@@ -50,7 +54,7 @@ export const UncompletedTodos = () => {
               onClick={() => mutate(todo.id as string)}
             >
               {isMutating && todo.id.toString() === variables?.toString()
-                ? "Loading"
+                ? "Toggling..."
                 : "Toggle to do"}
             </button>
             <Link
