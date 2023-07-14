@@ -60,51 +60,37 @@ export const useTodoToggleMutation = () => {
   return useMutation({
     mutationFn: (id: number | string) => handleToggleTodo(id),
     // onMutate: async (id) => {
-    //   // Backup the existing todos in case the mutation fails.
+    //   // Cancel any outgoing refetches
+    //   // (so they don't overwrite our optimistic update)
+    //   await queryClient.cancelQueries(["todos"]);
+
+    //   // Snapshot the previous value
     //   const previousTodos = queryClient.getQueryData<Todo[]>(["todos"]);
+    //   if (previousTodos?.length) {
+    //     const copy = structuredClone(previousTodos);
+    //     const index = copy.findIndex((todo) => todo.id === id.toString());
+    //     copy[index].completed = !copy[index].completed;
+    //     if (index !== -1) {
+    //       // queryClient.setQueriesData<Todo[] | Todo>(["todos"], (prevTodos) => {
+    //       //   if (Array.isArray(prevTodos) && prevTodos.length) {
+    //       //     return copy;
+    //       //   }
 
-    //   // Optimistically update to the new value.
-    //   queryClient.setQueryData<Todo[]>(["todos"], (old) => {
-    //     if (old?.length) {
-    //       const copy = [...old];
-    //       const index = copy.findIndex(
-    //         (todo) => todo.id.toString() === id.toString()
-    //       );
-    //       if (index !== -1) {
-    //         copy[index].completed = !copy[index].completed;
-
-    //         return copy;
-    //       }
-    //       return old;
+    //       //   return copy[index];
+    //       // });
+    //       queryClient.setQueryData(["todos"], copy);
+    //       queryClient.setQueryData(["todos", id.toString()], copy[index]);
     //     }
-    //   });
+    //   }
 
-    //   // Return the old todos to context in case a rollback is needed.
+    //   // Return a context object with the snapshotted value
     //   return { previousTodos };
     // },
-    // onError: (err, id, context: any) => {
-    //   // If the mutation fails, use the context returned from onMutate to roll back.
-    //   queryClient.setQueryData<Todo[]>(["todos"], context.previousTodos);
+    // onError: (_, __, context) => {
+    //   return queryClient.setQueryData(["todos"], context?.previousTodos);
     // },
-    onSettled: async (data) => {
-      // queryClient.setQueryData<Todo[]>(["todos"], (prevValues) => {
-      //   if (prevValues && data) {
-      //     const clonedPrevValues = [...prevValues];
-      //     const index = clonedPrevValues.findIndex(
-      //       (todo) => todo.id === data.id
-      //     );
-      //     if (index !== -1) {
-      //       // directly set the data on the cloned array
-      //       clonedPrevValues[index] = data;
-      //     }
-      //     return clonedPrevValues;
-      //   }
-      // });
-      // queryClient.setQueryData<Todo>(["todos", data?.id], data);
-
-      return await Promise.allSettled([
-        queryClient.invalidateQueries({ queryKey: ["todos"] }),
-      ]);
+    onSettled: async (lol) => {
+      return queryClient.invalidateQueries({ queryKey: ["todos"] });
     },
   });
 };
@@ -139,7 +125,7 @@ export const useTodoAddMutation = () => {
       queryClient.setQueryData(["todos"], context?.previousTodos);
     },
     onSettled: () => {
-      queryClient.invalidateQueries(["todos"]);
+      return queryClient.invalidateQueries(["todos"]);
     },
   });
 };

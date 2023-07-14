@@ -17,9 +17,6 @@ export const CompletedTodos = () => {
 
   const { mutate, isLoading: isMutating, variables } = useTodoToggleMutation();
 
-  // const completedTodos = useSelector(selectAllCompletedTodos);
-  // const isLoading = useSelector(selectTodoLoadingState);
-
   const title = "Completed todo's";
 
   if (isLoading) {

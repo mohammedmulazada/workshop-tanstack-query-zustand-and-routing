@@ -5,7 +5,7 @@ export const getAllTodos = async () => {
 
   const res: Todo[] = await data.json();
 
-  return res;
+  return res as Todo[];
 };
 
 export const getTodoById = async (todoId: string | number) => {

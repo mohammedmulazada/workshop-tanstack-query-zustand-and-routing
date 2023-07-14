@@ -5,13 +5,13 @@ import { useTodosQuery } from "./hooks/useTodo";
 import "./App.css";
 
 function App() {
-  const { data } = useTodosQuery({ select: (data) => data });
+  const params = useParams();
+  const { todoId } = params;
+  const { data } = useTodosQuery();
   const amountOfCompletedTodos = data?.filter((todo) => todo.completed).length;
   const amountOfUncompletedTodos = data?.filter(
     (todo) => !todo.completed
   ).length;
-  const params = useParams();
-  const { todoId } = params;
 
   return (
     <div className="App">
