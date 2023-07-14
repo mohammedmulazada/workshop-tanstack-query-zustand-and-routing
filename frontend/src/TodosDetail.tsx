@@ -9,7 +9,7 @@ export const TodosDetail = () => {
   if (!todoId || todoId === undefined) {
     navigate("/");
   }
-  const { data: todo, isLoading } = useTodoQuery({ id: todoId as string });
+  const { data: todo, isLoading } = useTodoQuery(todoId as string);
   const { mutate, isLoading: isMutating } = useTodoToggleMutation();
 
   const toggleTodo = async (id: string) => {

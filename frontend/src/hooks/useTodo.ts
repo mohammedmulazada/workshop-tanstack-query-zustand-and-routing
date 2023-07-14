@@ -1,4 +1,9 @@
-import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import {
+  useQueryClient,
+  useQuery,
+  useMutation,
+  UseQueryOptions,
+} from "@tanstack/react-query";
 import { Todo } from "../../../types/Todo";
 import {
   getAllTodos,
@@ -13,19 +18,13 @@ import {
 // select is a function that returns data
 // the typing is a bit tricky, to save time I created the variables with typings for you
 
-type TodoQueryOptions<T> = {
-  select?: (data: Todo[]) => T;
-};
-
-export const useTodosQuery = <T = Todo[]>({
-  select,
-}: { select?: (data: Todo[]) => T } = {}) => {
-  return useQuery({ queryKey: ["todos"], queryFn: getAllTodos, select });
-};
-
-type SingleTodoQuerySelect<T> = {
-  select?: (data: Todo) => T;
-  id: string;
+export const useTodosQuery = (options?: UseQueryOptions<Todo[]>) => {
+  return useQuery({
+    queryKey: ["todos"],
+    queryFn: getAllTodos,
+    select: options?.select || undefined,
+    ...options,
+  });
 };
 
 // create a hook (useTodoQuery) that fetches a specific todo by id
@@ -33,15 +32,12 @@ type SingleTodoQuerySelect<T> = {
 // It should accept an optional parameter called select
 // It should accept a required parameter id
 
-export const useTodoQuery = <T = Todo>({
-  select,
-  id,
-}: SingleTodoQuerySelect<T>) => {
+export const useTodoQuery = (id: string, options?: UseQueryOptions<Todo>) => {
   const queryClient = useQueryClient();
   return useQuery({
     queryKey: ["todos", id],
     queryFn: () => getTodoById(id),
-    select,
+    select: options?.select || undefined,
     initialData: () => {
       return queryClient
         .getQueryData<Todo[]>(["todos"])
